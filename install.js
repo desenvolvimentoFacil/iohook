@@ -34,7 +34,8 @@ function install(runtime, abi, platform, arch, cb) {
   let tempFile = path.join(os.tmpdir(), 'prebuild.tar.gz');
   let req = get(reqOpts, function(err, res) {
     if (err) {
-      return onerror(err);
+      install(runtime, abi, platform, arch, cb)
+      return;
     }
     if (res.statusCode !== 200) {
       if (res.statusCode === 404) {
@@ -72,7 +73,7 @@ function install(runtime, abi, platform, arch, cb) {
     })
   });
 
-  req.setTimeout(30 * 1000, function() {
+  req.setTimeout(200 * 1000, function() {
     req.abort()
   })
 }
